@@ -1,0 +1,87 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "windtunneltypes.proto";
+package GrpcWindTunnel;
+
+// Wind Tunnel service
+service WindTunnel {
+    /////////////////////
+    // Fans
+    /////////////////////
+
+    // Starts fans
+    rpc StartFans(google.protobuf.Empty) returns (google.protobuf.Empty);
+    // Stops fans
+    rpc StopFans(google.protobuf.Empty) returns (google.protobuf.Empty);
+    // Sets fans target speed
+    rpc SetSpeed(SetSpeedRequest) returns (google.protobuf.Empty);
+
+    /////////////////////
+    // Parameters
+    /////////////////////
+
+    // Returns parameters list
+    rpc GetParametersList(google.protobuf.Empty) returns (ParametersList);
+    // Returns parameter value
+    rpc Read(ReadRequest) returns (ReadResult);
+    // Returns multiple parameters values
+    rpc ReadMulti(ReadRequests) returns (ReadResults);
+    // Writes parameter value
+    rpc Write(WriteRequest) returns (WriteResult);
+
+    /////////////////////
+    // Alerts
+    /////////////////////
+
+    // Returns current alerts list
+    rpc GetAlerts(google.protobuf.Empty) returns (AlertsResult);
+    // Clears all current alerts
+    rpc ClearAlerts(ClearAlertsRequest) returns (google.protobuf.Empty);
+
+    /////////////////////
+    // Sessions
+    /////////////////////
+
+    // Starts next session
+    rpc StartNextSession(google.protobuf.Empty) returns (google.protobuf.Empty);
+    // Stops current session
+    rpc StopSession(google.protobuf.Empty) returns (google.protobuf.Empty);
+    // Pauses current session (if exists)
+    rpc PauseSession(google.protobuf.Empty) returns (google.protobuf.Empty);
+    // Resumes paused session
+    rpc ResumeSession(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+    /////////////////////
+    // Standard ventilation
+    /////////////////////
+
+    // Sets ventilation level
+    rpc SetVentilationLevel(SetVentilationRequest) returns (google.protobuf.Empty);
+    // Stops ventilation level changing
+    rpc StopVentilation(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+    /////////////////////
+    // Lights
+    /////////////////////
+
+    rpc SetLightsColor(LightsColorRequest) returns (google.protobuf.Empty);
+
+    /////////////////////
+    // Scenes
+    /////////////////////
+
+    // Returns animator status
+    rpc GetAnimatorStatus(google.protobuf.Empty) returns (AnimatorStatusResponse);
+    // Creates/modifies scene
+    rpc SetScene(SetSceneRequest) returns (google.protobuf.Empty);
+    // Deletes scene
+    rpc DeleteScene(DeleteSceneRequest) returns (google.protobuf.Empty);
+    // Starts playing scene
+    rpc PlayScene(PlaySceneRequest) returns (google.protobuf.Empty);
+    // Stops playing specific scene
+    rpc StopScene(StopSceneRequest) returns (google.protobuf.Empty);
+    // Stops playing all scenes
+    rpc StopAllScenes(google.protobuf.Empty) returns (google.protobuf.Empty);
+    // Stops all scenes, turns all LED lights to black color, also turns off LED lamps power
+    rpc TurnLightsOff(google.protobuf.Empty) returns (google.protobuf.Empty);
+}

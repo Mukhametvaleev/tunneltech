@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./src/",
+        "downlevelIteration": true,
+        "esModuleInterop": true,
+        "jsx": "react",
+        "noImplicitAny": true,
+        "outDir": "./dist/",
+        "preserveConstEnums": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "es5",
+        "lib": ["es2019", "dom", "dom.iterable"]
+    },
+    "include": ["./src/**/*", "custom.d.ts"]
+}

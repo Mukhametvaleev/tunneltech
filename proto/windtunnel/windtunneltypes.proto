@@ -1,0 +1,271 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+package GrpcWindTunnel;
+
+// Set fans speed result
+message SetSpeedRequest {
+    // Target speed, %
+    double speed = 1;
+}
+
+// Alertion level
+enum AlertLevel {
+    // Information alert level
+    Information = 0;
+    // Warning alert level
+    Warning = 1;
+    // Fault alert level
+    Fault = 2;
+}
+
+// Alert auxiliary data
+message AlertAuxData {
+    // Record name
+    string name = 1;
+    // Record value
+    string value = 2;
+}
+
+// Tunnel alert
+message TunnelAlert {
+    // Alert code
+    string code = 1;
+    // Alert level
+    AlertLevel level = 2;
+    // Alert title
+    string title = 3;
+    // Alert tags
+    string tags = 4;
+    // Timestamp when alert occured (in UTC format)
+    google.protobuf.Timestamp time = 5;
+    // Auxiliary data
+    repeated AlertAuxData auxData = 6;
+    // Alert description
+    string description = 7;
+}
+
+// Read alerts result
+message AlertsResult {
+    // Alerts list
+    repeated TunnelAlert alerts = 1;
+}
+
+// RGB color
+message RgbColor {
+    // Red component, 0..255
+    int32 Red = 1;
+    // Green component, 0..255
+    int32 Green = 2;
+    // Blue component, 0..255
+    int32 Blue = 3;
+}
+// Wind tunnel operating mode
+enum OperatingMode {
+    // Wind tunnel is sleeping
+    Sleep = 0;
+    // Flying people mode
+    Work = 1;
+    // Maintenance mode
+    Maintenance = 2;
+}
+
+// Parameter value quality
+enum ParameterQuality {
+    // Means that parameter value is actual
+    GOOD = 0;
+    // Means that parameter value can be incorrect
+    BAD = 1;
+    // Means that parameter value still was not set
+    NOT_SET = 2;
+}
+
+// Parameter direction
+enum ParameterDirection {
+    // Read only parameter
+    READ = 0;
+    // Readable/writeable parameter
+    READ_WRITE = 1;
+}
+
+// Fans subsystem state
+enum FansState
+{
+    // Terminated state
+    Terminated = 0;
+    // Terminating state
+    Terminating = 1;
+    // Fans synchronizing state
+    Synchronizing = 2;
+    // Fans turned off state
+    TurnedOff = 3;
+    // Fans turning on state
+    TurningOn = 4;
+    // Fans turned on state
+    TurnedOn = 5;
+    // Stopping because of emergency situation
+    EmergencyOff = 6;
+}
+
+// Parameter information
+message ParameterInfo {
+    // Parameter name
+    string name = 1;
+    // Parameter tags
+    string tags = 2;
+    // Parameter operationg direction
+    ParameterDirection direction = 3;
+    // Parameter dimension
+    string dimension = 4;
+}
+
+// Parameter read result
+message ReadResult {
+    // Parameter name
+    string name = 1;
+    // Parameter tags
+    string tags = 2;
+    // Parameter quality
+    ParameterQuality quality = 3;
+    // Parameter value
+    oneof value {
+        bool boolValue = 4;
+        int32 intValue = 5;
+        double doubleValue = 6;
+        string stringValue = 7;
+        OperatingMode operatingMode = 8;
+        FansState fansState = 9;
+        google.protobuf.Timestamp time = 10;
+        RgbColor rgbColor = 11;
+        google.protobuf.Duration duration = 12;
+    }
+}
+
+// Parameter write request
+message WriteRequest {
+    // Parameter name
+    string name = 1;
+    // Parameter tags
+    string tags = 2;
+    // Parameter value
+    oneof value {
+        bool boolValue = 3;
+        int32 intValue = 4;
+        double doubleValue = 5;
+        string stringValue = 6;
+        OperatingMode operatingMode = 7;
+        FansState fansState = 8;
+        google.protobuf.Timestamp time = 9;
+        RgbColor rgbColor = 10;
+        google.protobuf.Duration duration = 11;
+    }
+}
+
+// Read parameters values
+message ReadRequests {
+    // List of parameters to read
+    repeated ReadRequest parameters = 1;
+}
+
+// Parameter read request
+message ReadRequest {
+    // Parameter name
+    string name = 1;
+    // Parameter tags
+    string tags = 2;
+}
+
+// Parameters read result
+message ReadResults {
+    // Parameters values
+    repeated ReadResult parameters = 1;
+}
+
+// Parameter write result
+message WriteResult {
+    // Write success status
+    bool success = 1;
+    // If writing was not successfull, contains fail reason
+    string failReason = 2;
+}
+
+// Parameters info list
+message ParametersList {
+    // Parameters info list
+    repeated ParameterInfo parameters = 1;
+}
+
+// Clear alerts request
+message ClearAlertsRequest {
+}
+
+// Set ventilation level request
+message SetVentilationRequest {
+    // Target level, %
+    double level = 1;
+}
+
+// Scene
+message SceneInfoMessage {
+    // Scene name
+    string name = 1;
+    // Playing state
+    bool isPlaying = 2;
+    // Is scene statis
+    bool isStatic = 3;
+    // Is system scene
+    bool isSystem = 4;
+    // Scene priority
+    int32 priority = 5;
+}
+
+// List of available scenes
+message AnimatorStatusResponse {
+    // Maximum available user scenes
+    int32 MaxUserScenes = 1;
+    // Scene name
+    repeated SceneInfoMessage scenes = 2;
+}
+
+// Create/modify scene request
+message SetSceneRequest {
+    // Scene content
+    string content = 1;
+    // Start playing scene
+    bool play = 2;
+    // Playing priority
+    int32 priority = 3;
+}
+
+// Delete scene request
+message DeleteSceneRequest {
+    // Scene name
+    string name = 1;
+}
+
+// Play scene request
+message PlaySceneRequest {
+    // Scene name
+    string name = 1;
+    // Scene priority. Greater number == higher priority
+    int32 priority = 2;
+}
+
+// Stop playing scene request
+message StopSceneRequest {
+    // Scene name
+    string name = 1;
+}
+
+// Set lights color request
+message LightsColorRequest {
+    // List of tags filters. Using regex for every tag value is allowed
+    // Examples:
+    //   "orientation=vertical"
+    //   "location=diffuser,orientation=horizontal"
+    //   "location=diffuser,position={1,2}"
+    string tagFilter = 1;
+
+    // Color
+    RgbColor color = 2;
+}
