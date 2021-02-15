@@ -20,3 +20,6 @@ python manage.py runserver
 python manage.py beatserver
 npm run watch
 ```
+
+## Preview
+<img src="https://github.com/Mukhametvaleev/tunneltech/raw/master/preview.gif" width="400" />
