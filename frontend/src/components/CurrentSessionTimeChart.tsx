@@ -1,4 +1,4 @@
-import { Pie, PieChart, Tooltip } from 'recharts';
+import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts';
 import React, { ReactElement, useMemo, useRef } from 'react';
 import _ from 'lodash';
 import { ReadResult } from 'shared/types';
@@ -26,6 +26,8 @@ export const CurrentSessionTimeChart = (props: Props): ReactElement => {
         return value;
     }, [readResult]);
 
+    const COLORS = ['#FF0000', '#0000FF'];
+
     return (
         <PieChart width={400} height={180}>
             <Pie
@@ -34,9 +36,17 @@ export const CurrentSessionTimeChart = (props: Props): ReactElement => {
                 data={currentSessionTime.current}
                 fill="#FF0000"
                 label
-                paddingAngle={2}
+                paddingAngle={3}
                 dataKey="value"
-            />
+                isAnimationActive={false}
+                outerRadius={90}
+                cy={130}
+            >
+                {currentSessionTime.current.map((entry, index) => (
+                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                ))}
+            </Pie>
+            <Legend />
             <Tooltip />
         </PieChart>
     );
