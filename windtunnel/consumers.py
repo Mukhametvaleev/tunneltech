@@ -6,7 +6,6 @@ from windtunnel import services
 
 class GRPCWindTunnelConsumer(AsyncConsumer):
     def __init__(self):
-        pass
         self.windtunnel_servicer = services.WindTunnelServicer()
 
     async def windtunnel_read_multi(self, message):
